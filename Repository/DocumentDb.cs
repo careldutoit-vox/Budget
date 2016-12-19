@@ -22,15 +22,20 @@
             _collectionId = collection;
             Initilization = InitializeAsync();
         }
-
+        protected static string DatabaseId
+        {
+            get { return _databaseId;}
+        }
+        protected static string CollectionId
+        {
+            get { return _collectionId; }
+        }
         public Task Initilization { get; private set; }
 
         private async Task InitializeAsync()
         {
             await ReadOrCreateDatabase();
-            await ReadOrCreateCollection(_database.SelfLink);
-            //CreateDatabaseIfNotExistsAsync().Wait();
-            //CreateCollectionIfNotExistsAsync().Wait();
+            await ReadOrCreateCollection();
         }
 
         protected static DocumentClient Client
@@ -50,60 +55,21 @@
             get { return _collection; }
         }
 
-        private static async Task CreateDatabaseIfNotExistsAsync()
+        private static async Task ReadOrCreateCollection()
         {
-            try
-            {
-                await _client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(_databaseId));
-            }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    _client.CreateDatabaseAsync(new Database { Id = _databaseId });
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        private static async Task CreateCollectionIfNotExistsAsync()
-        {
-            try
-            {
-                await _client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_databaseId, _collectionId));
-            }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    _client.CreateDocumentCollectionAsync(
-                        UriFactory.CreateDatabaseUri(_databaseId),
-                        new DocumentCollection { Id = _collectionId },
-                        new RequestOptions { OfferThroughput = 1000 });
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        private static async Task ReadOrCreateCollection(string databaseLink)
-        {
-            var collections = Client.CreateDocumentCollectionQuery(databaseLink)
+           
+            var collections = Client.CreateDocumentCollectionQuery(UriFactory.CreateDatabaseUri(DatabaseId))
                               .Where(col => col.Id == _collectionId).ToArray();
-
             if (collections.Any())
             {
                 _collection = collections.First();
             }
             else
             {
-                _collection = await Client.CreateDocumentCollectionAsync(databaseLink,
-                    new DocumentCollection { Id = _collectionId });
+                _collection = await Client.CreateDocumentCollectionAsync(
+                        UriFactory.CreateDatabaseUri(_databaseId),
+                        new DocumentCollection { Id = _collectionId },
+                        new RequestOptions { OfferThroughput = 1000 });
             }
         }
 

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dns.Web.Test", "Budget\Dns.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{C7FA2CB9-3CE5-4530-B464-32B181F9EA3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{0CF0CA57-FF5A-4E71-96AF-318B38D845DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityModels", "Models\EntityModels.csproj", "{0CF0CA57-FF5A-4E71-96AF-318B38D845DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{2C2D1988-686B-4220-8F91-81E35E5BB22A}"
 EndProject

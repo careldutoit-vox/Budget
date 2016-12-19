@@ -9,12 +9,12 @@
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Azure.Documents.Linq;
-    using Models;
+    using EntityModels;
 
     public class DocumentDBRepository<T> : DocumentDb where T : EntityBase
     {
-        private string DatabaseId = ConfigurationManager.AppSettings["database"];
-        private string CollectionId = ConfigurationManager.AppSettings["collection"];
+        //private string DatabaseId = ConfigurationManager.AppSettings["database"];
+        //private string CollectionId = ConfigurationManager.AppSettings["collection"];
         //private DocumentClient client;
         public DocumentDBRepository()
             : base(ConfigurationManager.AppSettings["database"], ConfigurationManager.AppSettings["collection"]) { }
@@ -44,25 +44,19 @@
 
         public async Task<List<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
         {
-            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
-                 .Where(predicate)
-                 .AsEnumerable()
-                 .ToList();
+            IDocumentQuery<T> query = Client.CreateDocumentQuery<T>(
+                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                new FeedOptions { MaxItemCount = -1 })
+                .Where(predicate)
+                .AsDocumentQuery();
 
-            return query;
-            //IDocumentQuery<T> query = Client.CreateDocumentQuery<T>(
-            //    UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-            //    new FeedOptions { MaxItemCount = -1 })
-            //    .Where(predicate)
-            //    .AsDocumentQuery();
+            List<T> results = new List<T>();
+            while (query.HasMoreResults)
+            {
+                results.AddRange(await query.ExecuteNextAsync<T>());
+            }
 
-            //List<T> results = new List<T>();
-            //while (query.HasMoreResults)
-            //{
-            //    results.AddRange(await query.ExecuteNextAsync<T>());
-            //}
-
-            //return results;
+            return results;
         }
 
         public async Task<Document> CreateItemAsync(T item)

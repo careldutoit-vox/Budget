@@ -1,6 +1,6 @@
 ﻿namespace Services
 {
-    using Models;
+    using EntityModels;
     using System;
     using System.Collections.Generic;
     using System.Linq;

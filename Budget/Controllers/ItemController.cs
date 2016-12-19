@@ -3,15 +3,15 @@
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using Models;
     using Repository;
+    using EntityModels;
 
     public class ItemController : Controller
     {
         private DocumentDBRepository<Values_Audits> documentDb; 
         public ItemController()
         {
-            documentDb = new DocumentDBRepository<Values_Audits>("Testss");
+            documentDb = new DocumentDBRepository<Values_Audits>("Test8");
         }
         [ActionName("Index")]
         public async Task<ActionResult> IndexAsync()

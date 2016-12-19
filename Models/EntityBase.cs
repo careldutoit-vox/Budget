@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace EntityModels
 {
     using Microsoft.Azure.Documents;
     using Newtonsoft.Json;
