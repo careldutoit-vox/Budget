@@ -16,18 +16,24 @@
         //private string DatabaseId = ConfigurationManager.AppSettings["database"];
         //private string CollectionId = ConfigurationManager.AppSettings["collection"];
         //private DocumentClient client;
+        private static string _userId;
         public DocumentDBRepository()
             : base(ConfigurationManager.AppSettings["database"], ConfigurationManager.AppSettings["collection"]) { }
 
-        public DocumentDBRepository(string collectionId)
-            : base(ConfigurationManager.AppSettings["database"], collectionId){}
+        public DocumentDBRepository(string collectionId, string UserId)
+            : base(ConfigurationManager.AppSettings["database"], collectionId){
+                _userId = UserId;
+        }
 
         public async Task<T> GetItemAsync(string id)
         {
             try
             {
                 Document document = await Client.ReadDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id));
-                return (T)(dynamic)document;
+                if (((T)(dynamic)document).UserId == _userId)
+                    return (T)(dynamic)document;
+                else
+                    return null;
             }
             catch (DocumentClientException e)
             {
@@ -42,12 +48,30 @@
             }
         }
 
+        public async Task<T> GetUserItemAsync()
+        {
+            IDocumentQuery<T> query = Client.CreateDocumentQuery<T>(
+                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                new FeedOptions { MaxItemCount = -1 })
+                .Where(func => func.UserId == _userId)
+                .AsDocumentQuery();
+
+            List<T> results = new List<T>();
+            while (query.HasMoreResults)
+            {
+                results.AddRange(await query.ExecuteNextAsync<T>());
+            }
+            if (results == null)
+                return null;
+            return results.First();
+        }
         public async Task<List<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
         {
             IDocumentQuery<T> query = Client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
                 new FeedOptions { MaxItemCount = -1 })
                 .Where(predicate)
+                .Where(func => func.UserId == _userId)
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();
@@ -61,6 +85,7 @@
 
         public async Task<Document> CreateItemAsync(T item)
         {
+            item.UserId = _userId;
             return await Client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
         }
 

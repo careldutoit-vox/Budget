@@ -1,20 +1,23 @@
 ﻿namespace Budget.Controllers
 {
-    using System.Net;
-    using System.Threading.Tasks;
-    using System.Web.Mvc;
-    using Repository;
     using EntityModels;
-    using Microsoft.AspNet.Identity;
+    using Repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Mvc;
     using System.Web.Routing;
+    using Microsoft.AspNet.Identity;
+    using System.Net;
 
-    [Authorize]
-    public class ItemController : Controller
+    public class IncomeController : Controller
     {
-        private DocumentDBRepository<Values_Audits> documentDb; 
-        public ItemController()
+        private DocumentDBRepository<Income> documentDb;
+        public IncomeController()
         {
-            
+           
         }
         protected override void Initialize(RequestContext requestContext)
         {
@@ -23,14 +26,15 @@
             if (requestContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 string userId = requestContext.HttpContext.User.Identity.GetUserId();
-                documentDb = new DocumentDBRepository<Values_Audits>("Test8", userId);
+                documentDb = new DocumentDBRepository<Income>(this.GetType().Name.Replace("Controller",""), userId);
             }
 
         }
-        [ActionName("Index")]
-        public async Task<ActionResult> IndexAsync()
+        //
+        // GET: /Income/
+        public async Task<ActionResult> Index()
         {
-            var items = await documentDb.GetItemsAsync(d => !d.Completed);
+            var items = await documentDb.GetUserItemAsync();
             return View(items);
         }
 
@@ -45,7 +49,7 @@
         [HttpPost]
         [ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync([Bind(Include = "Id,Name,Description,Completed")] Values_Audits item)
+        public async Task<ActionResult> CreateAsync(Income item)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +63,7 @@
         [HttpPost]
         [ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync([Bind(Include = "Id,Name,Description,Completed")] Values_Audits item)
+        public async Task<ActionResult> EditAsync([Bind(Include = "Id,Name,Description,Completed")] Income item)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +82,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Values_Audits item = await documentDb.GetItemAsync(id);
+            var item = await documentDb.GetItemAsync(id);
             if (item == null)
             {
                 return HttpNotFound();
@@ -95,7 +99,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Values_Audits item = await documentDb.GetItemAsync(id);
+            var item = await documentDb.GetItemAsync(id);
             if (item == null)
             {
                 return HttpNotFound();
@@ -116,7 +120,7 @@
         [ActionName("Details")]
         public async Task<ActionResult> DetailsAsync(string id)
         {
-            Values_Audits item = await documentDb.GetItemAsync(id);
+            var item = await documentDb.GetItemAsync(id);
             return View(item);
         }
     }

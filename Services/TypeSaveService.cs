@@ -15,11 +15,11 @@ namespace Services
         #region Ctor
         public TypeSaveService() 
         {
-            _dbContext = new DocumentDBRepository<T>(typeof(T).Name);
+            _dbContext = new DocumentDBRepository<T>(typeof(T).Name,"");
         }
         public TypeSaveService(string collectionName)
         {
-            _dbContext = new DocumentDBRepository<T>(collectionName);
+            _dbContext = new DocumentDBRepository<T>(collectionName,"");
         }
         #endregion
 
