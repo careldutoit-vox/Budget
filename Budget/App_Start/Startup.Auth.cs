@@ -8,6 +8,7 @@
     //using Microsoft.Owin.Security.Google;
     using Owin;
     using Budget.Models;
+    using Microsoft.Owin.Security.Google;
 
 
     public partial class Startup
@@ -57,11 +58,12 @@
             //app.UseFacebookAuthentication(
             //   appId: "",
             //   appSecret: "");
-
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            app.UseGoogleAuthentication();
+            //app.UseGoogleAuthentication(new GoogleAuthenticationOptions()
             //{
-            //    ClientId = "",
-            //    ClientSecret = ""
+                  
+            //    ClientId = "928136716135-n3s8u8c8ct71daf0l1lek5bch68vtmle.apps.googleusercontent.com",
+            //    ClientSecret = "V-yvYlAzCrakr8_6s7eDDZpM"
             //});
         }
     }

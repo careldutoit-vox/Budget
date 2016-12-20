@@ -13,7 +13,6 @@ using Budget.Models;
 
 namespace Budget.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
