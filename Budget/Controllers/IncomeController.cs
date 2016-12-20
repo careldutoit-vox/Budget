@@ -12,6 +12,7 @@
     using Microsoft.AspNet.Identity;
     using System.Net;
 
+    [Authorize]
     public class IncomeController : Controller
     {
         private DocumentDBRepository<Income> documentDb;
@@ -35,6 +36,8 @@
         public async Task<ActionResult> Index()
         {
             var items = await documentDb.GetUserItemAsync();
+            if (items == null)
+                return RedirectToAction("Create");
             return View(items);
         }
 

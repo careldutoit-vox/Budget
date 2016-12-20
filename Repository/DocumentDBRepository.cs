@@ -61,7 +61,7 @@
             {
                 results.AddRange(await query.ExecuteNextAsync<T>());
             }
-            if (results == null)
+            if (results == null || !results.Any())
                 return null;
             return results.First();
         }

@@ -26,6 +26,17 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Category, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+        @Html.EnumDropDownListFor(
+    model => model.Category,
+    "Select My Type",
+    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+        
+        <div class="form-group">
             @Html.LabelFor(model => model.Amount, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Amount)
@@ -36,7 +47,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PaymentDate, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PaymentDate)
+                @Html.EditorFor(model => model.PaymentDate, new { @class = "form-control datepicker", @id = "datepicker" })
                 @Html.ValidationMessageFor(model => model.PaymentDate)
             </div>
         </div>

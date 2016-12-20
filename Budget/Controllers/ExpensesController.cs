@@ -12,6 +12,7 @@
     using System.Web.Routing;
     using Microsoft.AspNet.Identity;
 
+    [Authorize]
     public class ExpensesController : Controller
     {
         private DocumentDBRepository<Expenses> documentDb;
