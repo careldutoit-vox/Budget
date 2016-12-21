@@ -87,7 +87,9 @@
         {
             item.UserId = _userId;
             return await Client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
+            
         }
+
 
         public async Task<Document> UpdateItemAsync(string id, T item)
         {

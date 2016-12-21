@@ -31,6 +31,26 @@
             }
 
         }
+         public async Task<ActionResult> GetFromMail()
+        {
+            //var mailrepo = new MailRepository();
+            //mailrepo.ReadAllMails("fnb");
+            string _client_id = "157077024985-hdi3jkdmppbl40l3qr6ma8h22ggve0hp.apps.googleusercontent.com";
+            string _client_secret = "QXWDdsOQDl7gb7McGUqWCuya";
+
+            var mails = new CustomMailService().GetMails(_client_id, _client_secret);
+            //string userId = HttpContext.User.Identity.GetUserId();
+            //var EmaildocumentDb = new DocumentDBRepository<EmailModel>("Mails", userId);
+            foreach (var item in mails)
+            {
+                await documentDb.CreateItemAsync(item);    
+            }
+            
+            
+            return RedirectToAction("Index");
+            return null; ;
+        }
+        
         //
         // GET: /Income/
         public async Task<ActionResult> Index()

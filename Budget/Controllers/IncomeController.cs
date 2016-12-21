@@ -35,7 +35,7 @@
         // GET: /Income/
         public async Task<ActionResult> Index()
         {
-            MailRepository.Read();
+            
             var items = await documentDb.GetUserItemAsync();
             if (items == null)
                 return RedirectToAction("Create");

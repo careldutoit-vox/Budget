@@ -16,6 +16,7 @@ namespace EntityModels
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.DateTime)]
         public DateTime PaymentDate { get; set; }
+        public PaymentType PaymentType { get; set; }
     }
 
     public enum Category{
@@ -23,5 +24,10 @@ namespace EntityModels
         Morgage,
         Insurance,
 
+    }
+    public enum PaymentType
+    {
+        Buy, //Reserved,
+        Bill //Paid
     }
 }

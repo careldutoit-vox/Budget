@@ -58,10 +58,17 @@
             //app.UseFacebookAuthentication(
             //   appId: "",
             //   appSecret: "");
-            app.UseGoogleAuthentication();
+
+            //var googleOAuth2AuthenticationOptions = new goo GoogleOAuth2AuthenticationOptions
+            //{
+            //    ClientId = "MYCLIENTID",
+            //    ClientSecret = "MYSECRET",
+            //};
+            //app.UseGoogleAuthentication(googleOAuth2AuthenticationOptions);
+
             //app.UseGoogleAuthentication(new GoogleAuthenticationOptions()
             //{
-                  
+                
             //    ClientId = "928136716135-n3s8u8c8ct71daf0l1lek5bch68vtmle.apps.googleusercontent.com",
             //    ClientSecret = "V-yvYlAzCrakr8_6s7eDDZpM"
             //});

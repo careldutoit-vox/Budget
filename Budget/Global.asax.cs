@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EntityModels;
+using Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +20,7 @@ namespace Budget
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            DocumentDBRepository<Expenses> documentDb = new DocumentDBRepository<Expenses>("Users", "");
         }
     }
 }
